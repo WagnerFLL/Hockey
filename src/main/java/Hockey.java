@@ -6,8 +6,6 @@ import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.FPSAnimator;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -17,7 +15,7 @@ import static com.jogamp.opengl.GL.GL_DEPTH_BUFFER_BIT;
 
 public class Hockey extends GLCanvas implements GLEventListener, MouseListener, MouseMotionListener, ActionListener {
 
-    private static String TITLE = "JOGL 2.0 Setup (GLCanvas)";
+    private static String TITLE = "Ice Hockey Rink";
     private static final int CANVAS_WIDTH = 1300;
     private static final int CANVAS_HEIGHT = 780;
     private static final int FPS = 60;
@@ -30,9 +28,9 @@ public class Hockey extends GLCanvas implements GLEventListener, MouseListener, 
     private Bresenham bresenham = new Bresenham();
     private Naive naive = new Naive();
 
-    private static float thickness = 1;
-    private static int algorithimSelected = 0;
-    private static float red = 1, green = 1, blue = 1;
+    private static float thickness = 4;
+    private static int algorithmSelected = 0;
+    private static double red = 0, green = 0.1, blue = 0.2;
 
 
     @Override
@@ -52,7 +50,7 @@ public class Hockey extends GLCanvas implements GLEventListener, MouseListener, 
 
             final FPSAnimator animator = new FPSAnimator(canvas, FPS, true);
 
-            final JFrame frame = new JFrame(); // Swing's JFrame or AWT's Frame
+            final JFrame frame = new JFrame();
 
             frame.addWindowListener(new WindowAdapter() {
                 @Override
@@ -73,13 +71,13 @@ public class Hockey extends GLCanvas implements GLEventListener, MouseListener, 
 
             retaButton.addActionListener(e -> {
                 if (retaButton.isSelected()) {
-                    algorithimSelected = 0;
+                    algorithmSelected = 0;
                 }
             });
 
             bressButton.addActionListener(e -> {
                 if (bressButton.isSelected()) {
-                    algorithimSelected = 1;
+                    algorithmSelected = 1;
                 }
             });
 
@@ -144,11 +142,12 @@ public class Hockey extends GLCanvas implements GLEventListener, MouseListener, 
     public void display(GLAutoDrawable drawable) {
         GL2 gl = drawable.getGL().getGL2();
         gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        gl.glColor3f(red, green, blue);
+        gl.glClearColor(0.93f, 0.93f ,0.93f, 1);
+        gl.glColor3d(red, green, blue);
         gl.glPointSize(thickness);
 
         Drawer dw;
-        if (algorithimSelected == 1)
+        if (algorithmSelected == 1)
             dw = this.bresenham;
         else
             dw = this.naive;
