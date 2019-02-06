@@ -2,19 +2,23 @@ import com.jogamp.opengl.GL2;
 
 import static com.jogamp.opengl.GL.GL_POINTS;
 
-public class Bresenham extends Drawer {
+class Bresenham extends Drawer {
 
     @Override
-    void drawLine(int x1, int y1, int x2, int y2, GL2 gl) {
+    void drawLine(int x1, int y1, int x2, int y2, GL2 gl, boolean field) {
+        if (field) {
+            x1 = x1 + 780 - 370;
+            x2 = x2 + 780 - 370;
+        }
         int d = 0;
 
         int dx = Math.abs(x2 - x1);
         int dy = Math.abs(y2 - y1);
 
-        int dx2 = 2 * dx; // slope scaling factors to
-        int dy2 = 2 * dy; // avoid floating point
+        int dx2 = 2 * dx;
+        int dy2 = 2 * dy;
 
-        int ix = x1 < x2 ? 1 : -1; // increment direction
+        int ix = x1 < x2 ? 1 : -1;
         int iy = y1 < y2 ? 1 : -1;
 
         int x = x1;
@@ -49,7 +53,10 @@ public class Bresenham extends Drawer {
     }
 
     @Override
-    void drawCircle(int xc, int yc, int r, GL2 gl, int quadrant, boolean part) {
+    void drawCircle(int xc, int yc, int r, GL2 gl, int quadrant, boolean part, boolean field) {
+        if (field) {
+            xc = xc + 780 - 370;
+        }
         int x = 0, y = r;
         int d = 3 - 2 * r;
         circle(xc, yc, x, y, gl, quadrant, part);
@@ -60,8 +67,7 @@ public class Bresenham extends Drawer {
             if (d > 0) {
                 y--;
                 d = d + 4 * (x - y) + 10;
-            }
-            else
+            } else
                 d = d + 4 * x + 6;
 
             circle(xc, yc, x, y, gl, quadrant, part);
@@ -70,7 +76,7 @@ public class Bresenham extends Drawer {
 
     private void circle(int xc, int yc, int x, int y, GL2 gl, int quadrant, boolean part) {
         gl.glBegin(GL_POINTS);
-        if (part){
+        if (part) {
             if (quadrant == 1) {
                 gl.glVertex2d(xc + x, yc + y);
                 gl.glVertex2d(xc + y, yc + x);
