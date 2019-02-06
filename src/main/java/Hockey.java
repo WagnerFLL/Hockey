@@ -24,7 +24,7 @@ public class Hockey extends GLCanvas implements GLEventListener, MouseListener, 
     private static final int TICK_MIN = 0;
     private static final int TICK_INIT = 2;
     private static final int TICK_MAX = 10;
-    private ArrayList<Line> lines = new ArrayList<>();
+    private static ArrayList<Line> lines = new ArrayList<>();
     private Bresenham bresenham = new Bresenham();
     private Naive naive = new Naive();
 
@@ -108,9 +108,18 @@ public class Hockey extends GLCanvas implements GLEventListener, MouseListener, 
                 }
             });
 
+            JButton clearLines = new JButton("Limpar");
+            clearLines.setOpaque(true);
+            clearLines.addActionListener(e -> {
+                if (!lines.isEmpty()) {
+                    lines.clear();
+                }
+            });
+
 
             botoes.setLayout(new BoxLayout(botoes, BoxLayout.Y_AXIS));
             botoes.add(botaoCor);
+            botoes.add(clearLines);
             botoes.add(lOpcao);
             botoes.add(retaButton);
             botoes.add(bressButton);
